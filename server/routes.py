@@ -1,5 +1,5 @@
 from config import app, api
-from resources import Users, UserById, Playlists, PlaylistById, Songs, SongById, PlaylistSongRemove
+from resources import Users, UserById, Playlists, PlaylistById, Songs, SongById, PlaylistSongAdd, PlaylistSongRemove
 from flask import request
 from models import User
 
@@ -27,10 +27,8 @@ api.add_resource(UserById, "/users/<int:id>")
 # Playlist routes
 api.add_resource(Playlists, "/playlists")
 api.add_resource(PlaylistById, "/playlists/<int:id>")
-api.add_resource(
-    PlaylistSongRemove,
-    "/playlists/<int:playlist_id>/songs/<int:song_id>"
-)
+api.add_resource(PlaylistSongRemove, "/playlists/<int:playlist_id>/songs/<int:song_id>")
+api.add_resource(PlaylistSongAdd, "/playlists/<int:playlist_id>/songs")
 
 # Song routes
 api.add_resource(Songs, "/songs")

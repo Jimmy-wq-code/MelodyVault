@@ -4,6 +4,7 @@ from models import User, Playlist, Song, PlaylistSong, db
 from werkzeug.exceptions import NotFound, BadRequest
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+from sqlalchemy.orm import joinedload
 
 class Users(Resource):
     def get(self):
@@ -59,21 +60,42 @@ class UserById(Resource):
 
 class Playlists(Resource):
     def get(self):
-        return [p.to_dict() for p in Playlist.query.all()], 200
-    def post(self):
+        try:
+            playlists = Playlist.query.options(
+                joinedload(Playlist.playlist_songs).joinedload(PlaylistSong.song)
+            ).all()
+
+            return [p.to_dict_with_songs() for p in playlists], 200
+
+        except Exception as e:
+            print("Error fetching playlists:", e)
+            import traceback
+            traceback.print_exc()
+            return {"error": "Failed to fetch playlists"}, 500
+
+    def post(self, playlist_id):
         data = request.get_json()
-        if not data.get("name") or not data.get("user_id"):
-            raise BadRequest("Playlist must have a name and user_id")
-        if not User.query.get(data["user_id"]):
-            raise BadRequest("Invalid user_id")
-        new_playlist = Playlist(
-            name=data["name"],
-            description=data.get("description"),
-            user_id=data["user_id"]
-        )
-        db.session.add(new_playlist)
+        song_id = data.get("song_id")
+        if not song_id:
+            return {"error": "song_id is required"}, 400
+
+        playlist = Playlist.query.get(playlist_id)
+        song = Song.query.get(song_id)
+        if not playlist or not song:
+            return {"error": "Playlist or Song not found"}, 404
+
+        # Check if already added
+        existing = PlaylistSong.query.filter_by(
+            playlist_id=playlist_id, song_id=song_id
+        ).first()
+        if existing:
+            return {"error": "Song already in playlist"}, 400
+
+        ps = PlaylistSong(playlist=playlist, song=song)
+        db.session.add(ps)
         db.session.commit()
-        return new_playlist.to_dict(), 201
+
+        return ps.to_dict(), 201
 
 class PlaylistById(Resource):
     def get(self, id):
@@ -122,6 +144,31 @@ class PlaylistById(Resource):
         db.session.delete(playlist)
         db.session.commit()
         return {"message": f"Playlist {id} deleted"}, 204
+
+class PlaylistSongAdd(Resource):
+    def post(self, playlist_id):
+        data = request.get_json()
+        song_id = data.get("song_id")
+        if not song_id:
+            return {"error": "song_id is required"}, 400
+
+        playlist = Playlist.query.get(playlist_id)
+        song = Song.query.get(song_id)
+        if not playlist or not song:
+            return {"error": "Playlist or song not found"}, 404
+
+        # Prevent duplicate
+        existing = PlaylistSong.query.filter_by(
+            playlist_id=playlist.id, song_id=song.id
+        ).first()
+        if existing:
+            return {"error": "Song already in playlist"}, 400
+
+        ps = PlaylistSong(playlist_id=playlist.id, song_id=song.id)
+        db.session.add(ps)
+        db.session.commit()
+
+        return {"message": "Song added to playlist","playlist_song": { "id": playlist_song.id, "song": song.to_dict(), "note": playlist_song.note, "added_date": playlist_song.added_date.isoformat(), "likes": playlist_song.likes}}, 201
 
 class PlaylistSongRemove(Resource):
     def delete(self, playlist_id, song_id):

@@ -59,20 +59,36 @@ class Playlist(db.Model, SerializerMixin):
     serialize_rules = ("-user.playlists", "-playlist_songs.playlist")
 
     def to_dict_with_songs(self):
+        """Return playlist data including its songs safely."""
         base = self.to_dict()
-        base["songs"] = [
-            {
-                **ps.song.to_dict(),
+        songs_list = []
+
+        for ps in self.playlist_songs:
+            if ps.song:  # only include if song exists
+                song_data = ps.song.to_dict()
+            else:  # fallback if the song was deleted
+                song_data = {
+                    "id": ps.song_id,
+                    "title": "Deleted Song",
+                    "artist": "Unknown",
+                    "genre": None,
+                    "duration": None,
+                    "link": None
+                }
+
+            songs_list.append({
+                **song_data,
                 "note": ps.note,
                 "added_date": ps.added_date.isoformat() if ps.added_date else None,
-                "likes": getattr(ps, "likes", 0),
-            }
-            for ps in self.playlist_songs
-        ]
+                "likes": getattr(ps, "likes", 0)
+            })
+
+        base["songs"] = songs_list
         return base
 
     def __repr__(self):
         return f"<Playlist {self.name}>"
+
 
 # Song Model
 class Song(db.Model, SerializerMixin):

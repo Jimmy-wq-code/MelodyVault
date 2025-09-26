@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 from flask import Flask
+from flask_cors import CORS   # import CORS
 from config import app
-import routes  # registers all API resources
+import routes  
+
+# Enable CORS for all routes
+CORS(app)
 
 # Root route
 @app.route('/')

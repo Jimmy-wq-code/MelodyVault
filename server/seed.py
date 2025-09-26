@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from random import choice, randint
+from random import choice, randint, sample
 from datetime import datetime
 from faker import Faker
+from werkzeug.security import generate_password_hash
 from app import app
 from models import db, User, Playlist, Song, PlaylistSong
 
@@ -22,9 +23,9 @@ with app.app_context():
 
     print("Seeding users...")
     users = [
-        User(username="Jimmy Okwiri", email="jimmyokwiri@gmail.com"),
-        User(username="Nico Kiama", email="nicoKiama@gmail.com"),
-        User(username="Alice Sian", email="alicesian@gmail.com"),
+        User(username="Jimmy Okwiri", email="jimmyokwiri@gmail.com", password_hash=generate_password_hash("password123")),
+        User(username="Nico Kiama", email="nicoKiama@gmail.com", password_hash=generate_password_hash("mypassword")),
+        User(username="Alice Sian", email="alicesian@gmail.com", password_hash=generate_password_hash("alicepass")),
     ]
     db.session.add_all(users)
     db.session.commit()
@@ -38,18 +39,19 @@ with app.app_context():
     db.session.add_all(manual_songs)
     db.session.commit()
 
-    fake_songs = []
-    for _ in range(10):
-        fake_songs.append(
-            Song(
-                title=fake.sentence(nb_words=3).replace(".", ""),
-                artist=fake.name(),
-                genre=choice(["Pop", "Rock", "Hip-Hop", "Jazz", "Trap"]),
-                duration=format_duration(randint(120, 400)),
-            )
+    fake_songs = [
+        Song(
+            title=fake.sentence(nb_words=3).replace(".", ""),
+            artist=fake.name(),
+            genre=choice(["Pop", "Rock", "Hip-Hop", "Jazz", "Trap"]),
+            duration=format_duration(randint(120, 400)),
         )
+        for _ in range(10)
+    ]
     db.session.add_all(fake_songs)
     db.session.commit()
+
+    all_songs = Song.query.all()  # Get all songs after adding them
 
     print("Seeding playlists (manual + fake)...")
     manual_playlists = [
@@ -69,43 +71,38 @@ with app.app_context():
     db.session.add_all(manual_playlists)
     db.session.commit()
 
-    fake_playlists = []
-    for _ in range(5):
-        fake_playlists.append(
-            Playlist(
-                name=fake.catch_phrase(),
-                description=fake.text(max_nb_chars=50),
-                user_id=choice(users).id,
-                likes=randint(0, 50),
-            )
+    fake_playlists = [
+        Playlist(
+            name=fake.catch_phrase(),
+            description=fake.text(max_nb_chars=50),
+            user_id=choice(users).id,
+            likes=randint(0, 50),
         )
+        for _ in range(5)
+    ]
     db.session.add_all(fake_playlists)
     db.session.commit()
 
-    print("Seeding playlist songs (with notes + added_date + likes)...")
     all_playlists = Playlist.query.all()
-    all_songs = Song.query.all()
 
+    print("Assigning songs to playlists with notes, added_date, and likes...")
     playlist_songs = []
-    used_pairs = set()
-    for _ in range(15):
-        pl = choice(all_playlists)
-        song = choice(all_songs)
-        # Avoid duplicate playlist-song pairs
-        while (pl.id, song.id) in used_pairs:
-            pl = choice(all_playlists)
-            song = choice(all_songs)
-        used_pairs.add((pl.id, song.id))
-        playlist_songs.append(
-            PlaylistSong(
-                playlist_id=pl.id,
-                song_id=song.id,
-                note=fake.sentence(nb_words=6),
-                added_date=fake.date_time_between(start_date="-1y", end_date="now"),
-                likes=randint(0, 20),
+
+    for pl in all_playlists:
+        # Assign 3–6 random songs to each playlist
+        songs_for_playlist = sample(all_songs, k=randint(3, min(6, len(all_songs))))
+        for song in songs_for_playlist:
+            playlist_songs.append(
+                PlaylistSong(
+                    playlist_id=pl.id,
+                    song_id=song.id,
+                    note=fake.sentence(nb_words=6),
+                    added_date=fake.date_time_between(start_date="-1y", end_date="now"),
+                    likes=randint(0, 20),
+                )
             )
-        )
+
     db.session.add_all(playlist_songs)
     db.session.commit()
 
-    print("✅ Done seeding MelodyVault with likes, notes, and added_dates!")
+    print("✅ Done seeding MelodyVault with users, songs, playlists, and realistic playlist-song assignments!")
