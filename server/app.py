@@ -1,23 +1,13 @@
 #!/usr/bin/env python3
+from flask import Flask
+from config import app
+import routes  # registers all API resources
 
-# Standard library imports
-
-# Remote library imports
-from flask import request
-from flask_restful import Resource
-
-# Local imports
-from config import app, db, api
-# Add your model imports
-
-
-# Views go here!
-
+# Root route
 @app.route('/')
 def index():
-    return '<h1>Project Server</h1>'
+    return '<h1>MelodyVault Project Server</h1>'
 
-
+# Run server
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-

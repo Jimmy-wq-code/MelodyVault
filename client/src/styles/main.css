@@ -1,0 +1,322 @@
+:root {
+  --primary-bg: #f4f4f9;
+  --primary-color: #1a73e8;
+  --primary-color-hover: #155bb5;
+  --secondary-color: #e53935;
+  --secondary-color-hover: #b71c1c;
+  --text-color: #333;
+  --text-light: hsla(0, 0%, 100%, 0.88);
+  --card-bg: #fff;
+  --input-border: #ccc;
+  --input-border-focus: #1a73e8;
+  --error-color: #ff4d4f;
+  --shadow: 0 8px 20px rgba(0,0,0,0.1);
+  --radius: 10px;
+  --transition-speed: 0.3s;
+}
+
+/* DARK THEME */
+body.dark {
+  --primary-bg: #1f1f2e;
+  --primary-color: #61dafb;
+  --primary-color-hover: #21a1f1;
+  --secondary-color: #ff4d4f;
+  --secondary-color-hover: #b71c1c;
+  --text-color: #eaeaea;
+  --card-bg: #2c2c3c;
+  --input-border: #555;
+  --input-border-focus: #61dafb;
+  --shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* GLOBAL */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--primary-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  color: var(--primary-color);
+  transition: color var(--transition-speed);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+a:hover {
+  text-decoration: underline;
+  color: var(--primary-color-hover);
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  transition: background-color var(--transition-speed);
+}
+
+.navbar-logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--text-light);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links a {
+  font-weight: 500;
+  color: var(--text-light);
+  transition: color var(--transition-speed);
+}
+
+.navbar-links a:hover {
+  color: var(--primary-color-hover);
+}
+
+.logout-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+.logout-btn:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+/* PAGE CONTAINER */
+.page-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* HOME PAGE */
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-header p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.playlists-section {
+  margin-top: 2rem;
+}
+
+.playlists-grid,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.card,
+.playlist-skeleton {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+.card:hover,
+.playlist-skeleton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.skeleton-title {
+  height: 20px;
+  width: 60%;
+  background-color: #ddd;
+  border-radius: 4px;
+}
+
+.skeleton-desc {
+  height: 14px;
+  width: 80%;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+/* BUTTONS */
+button,
+.create-btn {
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+button:hover,
+.create-btn:hover {
+  background-color: var(--primary-color-hover);
+  transform: translateY(-2px);
+}
+
+/* AUTH FORMS */
+.auth-container,
+.auth-form,
+.form-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.auth-container h2,
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form input,
+.form-container input,
+.form-container textarea,
+.auth-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-border);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: border-color var(--transition-speed);
+}
+
+.auth-form input:focus,
+.form-container input:focus,
+.form-container textarea:focus,
+.auth-form textarea:focus {
+  outline: none;
+  border-color: var(--input-border-focus);
+}
+
+.error,
+.error-message {
+  color: var(--error-color);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* PLAYLISTS & SONGS */
+.song-list,
+.playlist-list {
+  list-style: none;
+  padding: 0;
+}
+
+.song-list li,
+.playlist-list li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+.remove-btn:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+/* SEARCH FORMS */
+.search-form {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 0.5rem;
+}
+
+.search-form button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color var(--transition-speed);
+}
+.search-form button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* 404 PAGE */
+.not-found {
+  text-align: center;
+  margin-top: 100px;
+}
+.not-found h1 {
+  font-size: 3rem;
+  color: var(--error-color);
+  margin-bottom: 20px;
+}
+.button-home {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color var(--transition-speed);
+}
+.button-home:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* ADD SONG SECTION */
+.add-song-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.add-song-section h3 {
+  margin-bottom: 1rem;
+}
