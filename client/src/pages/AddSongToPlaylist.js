@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-import "../styles/main.css";
 
 const AddSongToPlaylist = ({ songId, playlistId = null, onSongAdded }) => {
   const [playlists, setPlaylists] = useState([]);
@@ -26,26 +25,35 @@ const AddSongToPlaylist = ({ songId, playlistId = null, onSongAdded }) => {
   }, [playlistId]);
 
   const handleAddSong = async () => {
-    if (!selectedPlaylist) {
-      setError("Please select a playlist");
-      return;
-    }
+  if (!selectedPlaylist) {
+    setError("Please select a playlist");
+    return;
+  }
 
-    // Confirm before adding
-    if (!window.confirm("Add this song to the selected playlist?")) return;
+  if (!window.confirm("Add this song to the selected playlist?")) return;
 
-    setLoading(true);
-    setError(null);
-    try {
-      await api.post(`/playlists/${selectedPlaylist}/songs`, { song_id: songId });
-      if (onSongAdded) onSongAdded();
-    } catch (err) {
-      console.error("Failed to add song:", err);
-      setError("Failed to add song to playlist");
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  setError(null);
+
+  try {
+    const res = await api.post(
+      `/playlists/${selectedPlaylist}/songs`,
+      { song_id: songId }
+    );
+
+    // Return the newly added PlaylistSong
+    if (onSongAdded) onSongAdded(res.data.playlist_song);
+
+  } catch (err) {
+    console.error("Failed to add song:", err);
+    setError(
+      err.response?.data?.error || "Failed to add song to playlist"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="add-song-container">

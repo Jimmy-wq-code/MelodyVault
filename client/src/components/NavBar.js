@@ -1,28 +1,15 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useState, useEffect } from "react";
 import "../styles/main.css";
 
 const NavBar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("darkMode") === "true"
-  );
-
-  // Apply dark/light theme
-  useEffect(() => {
-    document.body.classList.toggle("dark", darkMode);
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
-  };
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -43,14 +30,6 @@ const NavBar = () => {
             <li><Link to="/signup">Sign Up</Link></li>
           </>
         )}
-        <li>
-          <button 
-            className="create-btn" 
-            onClick={toggleTheme}
-          >
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
-        </li>
       </ul>
     </nav>
   );

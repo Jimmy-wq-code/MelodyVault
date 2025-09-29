@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
 import "../styles/main.css";
-import AddSongToPlaylist from "../components/AddSongToPlaylist";
+import AddSongToPlaylist from "../pages/AddSongToPlaylist";
 import { useAuth } from "../context/AuthContext";
 
 const Songs = () => {

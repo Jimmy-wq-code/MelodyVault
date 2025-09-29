@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "../api/api";
@@ -9,6 +9,8 @@ import "../styles/main.css";
 const CreatePlaylist = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const onNewPlaylist = location.state?.onNewPlaylist; // callback from Playlists page
 
   const initialValues = {
     name: "",
@@ -36,6 +38,11 @@ const CreatePlaylist = () => {
         description: values.description.trim(),
         user_id: user.id,
       });
+
+      // Call the callback to update the Playlists list
+      if (onNewPlaylist) onNewPlaylist(res.data);
+
+      // Navigate to the new playlist detail page
       navigate(`/playlists/${res.data.id}`);
     } catch (err) {
       console.error("Failed to create playlist:", err);
@@ -59,19 +66,11 @@ const CreatePlaylist = () => {
         {({ isSubmitting }) => (
           <Form className="form-container">
             <label htmlFor="name">Name:</label>
-            <Field
-              type="text"
-              name="name"
-              placeholder="Enter playlist name"
-            />
+            <Field type="text" name="name" placeholder="Enter playlist name" />
             <ErrorMessage name="name" component="p" className="error" />
 
             <label htmlFor="description">Description:</label>
-            <Field
-              as="textarea"
-              name="description"
-              placeholder="Optional description"
-            />
+            <Field as="textarea" name="description" placeholder="Optional description" />
             <ErrorMessage name="description" component="p" className="error" />
 
             <button type="submit" disabled={isSubmitting}>

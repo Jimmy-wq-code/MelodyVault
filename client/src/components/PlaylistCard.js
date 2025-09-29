@@ -1,17 +1,19 @@
+// src/components/PlaylistCard.js
 import React from "react";
 import { Link } from "react-router-dom";
-import "./PlaylistCard.css";
+import "../styles/main.css";
 
-const PlaylistCard = ({ playlist }) => {
-  const { id, name, description, songs = [] } = playlist;
+const PlaylistCard = ({ playlist, description }) => {
+  // Safely calculate song count
+  const songCount = Array.isArray(playlist.songs) ? playlist.songs.length : 0;
 
   return (
     <div className="playlist-card">
-      <Link to={`/playlists/${id}`} className="playlist-link">
-        <h3>{name}</h3>
-        {description && <p>{description}</p>}
-        <p>{songs.length} {songs.length === 1 ? "song" : "songs"}</p>
+      <Link to={`/playlists/${playlist.id}`} className="playlist-link">
+        <h2>{playlist.name}</h2>
       </Link>
+      {description && <p>{description}</p>}
+      <p className="song-count">{songCount} {songCount === 1 ? "song" : "songs"}</p>
     </div>
   );
 };

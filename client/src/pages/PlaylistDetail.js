@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/api";
 import "../styles/main.css";
-import AddSongToPlaylist from "../components/AddSongToPlaylist";
+import AddSongToPlaylist from "./AddSongToPlaylist";
 import { useAuth } from "../context/AuthContext";
 
 const PlaylistDetail = () => {
@@ -82,16 +82,33 @@ const PlaylistDetail = () => {
           ))}
         </ul>
       )}
+      
+ {user && (
+  <div className="add-song-section">
+    <h3>Add Song to Playlist</h3>
+    <AddSongToPlaylist
+      playlistId={id}
+      onSongAdded={(newSong) => {
+        // Update playlist state immediately
+        setPlaylist((prev) => ({
+          ...prev,
+          songs: [...prev.songs, {
+            id: newSong.song.id,
+            title: newSong.song.title,
+            artist: newSong.song.artist,
+            genre: newSong.song.genre,
+            duration: newSong.song.duration,
+            link: newSong.song.link
+          }],
+        }));
 
-      {user && (
-        <div className="add-song-section">
-          <h3>Add Song to Playlist</h3>
-          <AddSongToPlaylist
-            playlistId={id}
-            onSongAdded={fetchPlaylist}
-          />
-        </div>
-      )}
+        // Show success message
+        setMsg("Song added successfully!");
+        setTimeout(() => setMsg(""), 3000);
+      }}
+    />
+  </div>
+)}
     </div>
   );
 };

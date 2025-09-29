@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import PlaylistCard from "../components/PlaylistCard";
 import SearchBar from "../components/SearchBar";
@@ -17,21 +17,39 @@ const Playlists = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const res = await api.get("/playlists");
-        setPlaylists(res.data);
-        setFilteredPlaylists(res.data);
-      } catch (err) {
-        setError("Failed to fetch playlists");
-        console.error(err);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchPlaylists = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await api.get("/playlists");
+      console.log("Playlists fetched:", res.data); // Debug: check returned data
+      setPlaylists(res.data);
+      setFilteredPlaylists(res.data);
+    } catch (err) {
+      if (err.response) {
+        // Backend returned a response with error status
+        console.error("Backend error:", err.response.data);
+        setError(
+          `Backend error: ${err.response.status} - ${err.response.data.error || JSON.stringify(err.response.data)}`
+        );
+      } else if (err.request) {
+        // Request made but no response received
+        console.error("No response received:", err.request);
+        setError("No response from server. Is the backend running?");
+      } else {
+        // Other errors
+        console.error("Request setup error:", err.message);
+        setError(`Error: ${err.message}`);
       }
-    };
-    fetchPlaylists();
-  }, []);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPlaylists();
+}, []);
 
   // Filter playlists based on search and category
   useEffect(() => {
@@ -56,13 +74,23 @@ const Playlists = () => {
     ...new Set(playlists.map((p) => p.category).filter(Boolean)),
   ];
 
-  const handleCreateClick = () => {
-    if (user) navigate("/create-playlist");
-    else navigate("/login");
-  };
+const handleCreateClick = () => {
+  if (user) {
+    navigate("/create-playlist", {
+      state: { onNewPlaylist: addPlaylistToList }
+    });
+  } else {
+    navigate("/login");
+  }
+};
+
+// Define the function to add a playlist
+const addPlaylistToList = (newPlaylist) => {
+  setPlaylists((prev) => [newPlaylist, ...prev]);
+  setFilteredPlaylists((prev) => [newPlaylist, ...prev]);
+};
 
   if (loading) {
-    // Show loading skeleton
     return (
       <div className="page-container">
         <h1>All Playlists</h1>
@@ -106,7 +134,6 @@ const Playlists = () => {
               key={playlist.id}
               playlist={playlist}
               description={playlist.description}
-              songCount={playlist.songs?.length || 0}
             />
           ))}
         </div>

@@ -5,7 +5,7 @@ import api from "../api/api";
 import PlaylistCard from "../components/PlaylistCard";
 import SearchBar from "../components/SearchBar";
 import FilterDropdown from "../components/FilterDropdown";
-import AddSongToPlaylist from "../components/AddSongToPlaylist";
+import AddSongToPlaylist from "../pages/AddSongToPlaylist";
 import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
