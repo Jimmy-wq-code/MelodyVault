@@ -62,7 +62,7 @@ cd MelodyVault
 - Take
 a look at the directory structure.
 
-```console
+```
 $ tree 
 .
 ├── .gitignore

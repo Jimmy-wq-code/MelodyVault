@@ -1,70 +1,95 @@
-# Getting Started with Create React App
+# 🎧 MelodyVault Client
+The client is the React frontend of MelodyVault, a music playlist manager that lets users browse, create, and manage playlists and songs with a clean UI.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ✨ Features
+- 🎨 Responsive UI built with React
+- 📂 Playlist Management – create and customize playlists
+- 🎵 Song Management – add, view, and remove songs
+- 🔗 Playlist ↔ Song Linking – connect songs to playlists dynamically
+- ⚡ Real-Time Updates – instant UI changes on CRUD operations
 
-## Available Scripts
+## 🛠️ Tech Stack
+- ⚛️ React (with Vite)
+- 🌐 Fetch API / Axios for backend communication
+- 🎨 CSS / Tailwind (optional customization)
 
-In the project directory, you can run:
+### 🚀 Getting Started
 
-### `npm start`
+1. Navigate to Client Folder
+```
+cd client
+```
+2. Install Dependencies
+```
+npm install --prefix client
+```
+3. Start Development Server
+```
+npm start --prefix client
+```
+- The client will now be available at:
+ http://localhost:3000
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Check that your the React client displays a default page http://localhost:3000. You should see a web page with the heading "Project Client".
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📂 Project Structure
+```
+├── client/
+│  ├─ public/
+│  │  ├─ index.html
+│  │  │  └─ favicon.ico
+│  ├─ src/
+│  │  ├─ api/
+│  │  │  └─ api.js
+│  │  ├─ components/
+│  │  │  ├─ FilterDropdown.js
+│  │  │  ├─ Footer.js
+│  │  │  ├─ NavBar.js
+│  │  │  ├─ PlaylistCard.js
+│  │  │  ├─ SearchBar.js
+│  │  │  ├─ SongCard.js
+│  ├─ context/
+│  │  └─ AuthContext.js
+│  │  ├─ pages/
+│  │  │  ├─ AddSongToPlaylist.js
+│  │  │  ├─ CreatePlaylist.js
+│  │  │  ├─ Home.js
+│  │  │  ├─ Login.js
+│  │  │  ├─ PlaylistDetails.js
+│  │  │  ├─ Playlists.js
+│  │  │  ├─ Profile.js
+│  │  │  ├─ SignUp.js
+│  │  │  ├─ SongDetail.js
+│  │  │  ├─ Songs.js
+│  │  ├─ styles/
+│  │  │  ├─ main.css
+│  │  │  │  ├─PlaylistCard.css
+│  │  ├─ App.js.js
+│  │  ├─ index.js
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── README.md
+```
+### 🧑‍💻 Development Notes
+- Update API base URL in services/api.js if backend runs on a different port.
+- Handle CORS errors by ensuring flask-cors is enabled on the backend.
 
-### `npm test`
+### 🤝 Contributing
+1. Fork this repository
+2. Create a feature branch (git checkout -b feature-name)
+3. Commit changes (git commit -m "Add feature")
+4. Push to branch (git push origin feature-name)
+5. Open a Pull Request
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### 💡 Inspiration
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Music is universal. MelodyVault is built for music lovers who want control over their playlists — simple, fast, and powerful.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Credits
+ This project was done by two brilliant individuals:
+   1. Jimmy Okiwri
+   2. Nicholas Kiama
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+We would like to thank Moringa for such a good opportuninity to do this project aand help us test the skills we gathered so far .
