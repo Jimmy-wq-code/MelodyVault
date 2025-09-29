@@ -71,6 +71,25 @@ npm start --prefix client
 ├── package.json
 ├── README.md
 ```
+## 📸 Screenshots
+
+Home Page 
+---
+<img src="./public/assets/HomePage.png" alt="Home Page" width="600">
+
+Playlist Page 
+---
+<img src="./public/assets/Playlist.png" alt="Playlist Page" width="600">
+
+Songs Page
+---
+<img src="./public/assets/SongsPage.png" alt="Songs Page" width="600">
+
+Profile Page
+---
+<img src="./public/assets/Profile.png" alt="Profile Page" width="600">
+
+
 ### 🧑‍💻 Development Notes
 - Update API base URL in services/api.js if backend runs on a different port.
 - Handle CORS errors by ensuring flask-cors is enabled on the backend.
