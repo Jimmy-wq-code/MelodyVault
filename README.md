@@ -151,6 +151,24 @@ The app will now be running on:
 
 - Backend API → http://localhost:5555
 
+## 📸 Screenshots
+
+Home Page 
+---
+<img src="./assets/HomePage.png" alt="Home Page" width="600">
+
+Playlist Page 
+---
+<img src="./assets/Playlist.png" alt="Playlist Page" width="600">
+
+Songs Page
+---
+<img src="./assets/SongsPage.png" alt="Songs Page" width="600">
+
+Profile Page
+---
+<img src="./assets/Profile.png" alt="Profile Page" width="600">
+
 
 ### 🤝 Contributing
 Contributions are welcome! 🎉
